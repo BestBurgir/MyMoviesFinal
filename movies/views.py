@@ -20,8 +20,8 @@ def get_stars(rating):
 
 def index(request):
     recent_movies = Movie.objects.all().order_by('-release_date')[:12]
-    genres = Genre.objects.all()
-    genre_movies = {genre: genre.movie_set.all()[:5] for genre in genres}
+    genres = Genre.objects.exclude(name__in=['Comedia', 'History','Sci-fi'])
+    genre_movies = {genre: genre.movie_set.all()[:12] for genre in genres}
 
     recent_movies_with_ratings = [
         {
@@ -67,6 +67,7 @@ def index(request):
     }
 
     return render(request, 'movies/index.html', context)
+
 
 def movie_detail(request, movie_id):
     movie = get_object_or_404(Movie, tmdb_id=movie_id)
